@@ -1,11 +1,16 @@
 package com.mygdx.tank_stars;
 
+import com.badlogic.gdx.graphics.Texture;
+
+import java.util.ArrayList;
+
 public class Tank {
 
     double fuel;
-    int maxPower;
     double maxHP;
-    String weapon1;
-    String weapon2;
+    Weapon w;
+    ArrayList<Integer> weapons;
+    Texture tankImage_l;
+    Texture tankImage_r;
 
 }
