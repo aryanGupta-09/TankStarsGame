@@ -19,34 +19,72 @@ public class MainMenu implements Screen {
     private Texture backgroundImage;
     private TextureRegion backgroundTexture;
 
-    private Texture buttonImage;
-    private TextureRegion buttonTexture;
-    private TextureRegionDrawable buttonTexRegionDrawable;
-    private ImageButton button;
+    private Texture newButtonImage,exitButtonImage,resumeButtonImage;
+    private TextureRegion newButtonTexture,exitButtonTexture,resumeButtonTexture;
+    private TextureRegionDrawable newButtonTexRegionDrawable,exitButtonTexRegionDrawable,resumeButtonTexRegionDrawable;
+    private ImageButton newGameButton,exitGameButton,resumeGameButton;
 
     OrthographicCamera camera;
     private Stage stage;
 
     public MainMenu(final TankStars game) {
         this.game = game;
-        backgroundImage = new Texture(Gdx.files.internal("background.jpg"));
+        backgroundImage = new Texture(Gdx.files.internal("tankstarbg1.png"));
         backgroundTexture = new TextureRegion(backgroundImage);
-        buttonImage = new Texture(Gdx.files.internal("atomic_l.png"));
-        buttonTexture = new TextureRegion(buttonImage);
-        buttonTexRegionDrawable = new TextureRegionDrawable(buttonTexture);
-        button = new ImageButton(buttonTexRegionDrawable); //Set the button up
+
+        newButtonImage = new Texture(Gdx.files.internal("newgameimg.png"));
+        newButtonTexture = new TextureRegion(newButtonImage);
+        newButtonTexRegionDrawable = new TextureRegionDrawable(newButtonTexture);
+
+        exitButtonImage = new Texture(Gdx.files.internal("exitgameimg.png"));
+        exitButtonTexture = new TextureRegion(exitButtonImage);
+        exitButtonTexRegionDrawable = new TextureRegionDrawable(exitButtonTexture);
+
+        resumeButtonImage = new Texture(Gdx.files.internal("resumegameimg.png"));
+        resumeButtonTexture = new TextureRegion(resumeButtonImage);
+        resumeButtonTexRegionDrawable = new TextureRegionDrawable(resumeButtonTexture);
+
+        newGameButton = new ImageButton(newButtonTexRegionDrawable); //Set the button up
+        newGameButton.setPosition(700,340);
         stage = new Stage(new ScreenViewport()); //Set up a stage for the ui
-        stage.addActor(button); //Add the button to the stage to perform rendering and take input.
+        stage.addActor(newGameButton); //Add the button to the stage to perform rendering and take input.
         Gdx.input.setInputProcessor(stage); //Start taking input from the ui
-        button.addListener(new ClickListener(){
+        newGameButton.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 game.setScreen(new GameScreen(game));
                 dispose();
             }
         });
+
+        resumeGameButton = new ImageButton(resumeButtonTexRegionDrawable); //Set the button up
+        resumeGameButton.setPosition(700,240);
+        resumeGameButton.setSize(213,42);
+        stage.addActor(resumeGameButton); //Add the button to the stage to perform rendering and take input.
+        Gdx.input.setInputProcessor(stage); //Start taking input from the ui
+        resumeGameButton.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Gdx.app.exit();
+                dispose();
+            }
+        });
+
+        exitGameButton = new ImageButton(exitButtonTexRegionDrawable); //Set the button up
+        exitGameButton.setPosition(700,140);
+        exitGameButton.setSize(213,42);
+        stage.addActor(exitGameButton); //Add the button to the stage to perform rendering and take input.
+        Gdx.input.setInputProcessor(stage);
+        exitGameButton.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Gdx.app.exit();
+            }
+        });
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 800, 480);
+
+
     }
 
     @Override
@@ -67,19 +105,11 @@ public class MainMenu implements Screen {
 
         game.batch.begin();
         game.batch.draw(backgroundTexture, 0,0, 800, 480);
-//        game.font.draw(game.batch, "Welcome to TankStars!", 300, 460);
-//        game.font.draw(game.batch, "New game!", 300, 440);
-//        game.font.draw(game.batch, "Resume game!", 300, 340);
-//        game.font.draw(game.batch, "Exit game!", 300, 240);
         game.batch.end();
 
         stage.act(Gdx.graphics.getDeltaTime()); //Perform ui logic
         stage.draw(); //Draw the ui
 
-//        if (Gdx.input.isTouched()) {
-//            game.setScreen(new GameScreen(game));
-//            dispose();
-//        }
     }
 
     @Override
