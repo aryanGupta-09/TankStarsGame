@@ -2,6 +2,7 @@ package com.mygdx.tank_stars;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -19,6 +20,7 @@ public class MainMenu implements Screen {
     private Texture backgroundImage;
     private TextureRegion backgroundTexture;
 
+    private Skin skin;
     private TextButton newGameButton;
     private TextButton resumeGameButton;
     private TextButton exitGameButton;
@@ -32,7 +34,7 @@ public class MainMenu implements Screen {
 
         backgroundImage = new Texture(Gdx.files.internal("tankstarbg1.png"));
         backgroundTexture = new TextureRegion(backgroundImage);
-        Skin skin = new Skin(Gdx.files.internal("quantum-horizon-ui.json"));
+        skin = new Skin(Gdx.files.internal("quantum-horizon-ui.json"));
 
         newGameButton = new TextButton("NEW GAME", skin);
         newGameButton.setPosition(660,340);
@@ -40,7 +42,7 @@ public class MainMenu implements Screen {
         newGameButton.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new GameScreen(game));
+                game.setScreen(new TankSelectionScreen(game));
                 dispose();
             }
         });
@@ -119,6 +121,8 @@ public class MainMenu implements Screen {
 
     @Override
     public void dispose() {
-
+        backgroundImage.dispose();
+        stage.dispose();
+        skin.dispose();
     }
 }

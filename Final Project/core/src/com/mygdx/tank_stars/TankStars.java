@@ -1,27 +1,33 @@
 package com.mygdx.tank_stars;
 
-import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 
 public class TankStars extends Game {
-	SpriteBatch batch;
+	public SpriteBatch batch;
 	Texture img;
-
 	BitmapFont font;
-	
-	@Override
+
+	FitViewport viewport;
+	OrthographicCamera camera;
+	ShapeRenderer shape;
+
 	public void create () {
 		batch = new SpriteBatch();
-		img = new Texture("badlogic.jpg");
+		img = new Texture("tankstarbg1.png");
 		font = new BitmapFont(); // use libGDX's default Arial font
-		this.setScreen(new MainMenu(this));
+		this.setScreen(new WeaponScreen(this,"toxic"));
 	}
 
 	public void render() {
+		shape = new ShapeRenderer();
+		camera = new OrthographicCamera();
+		viewport = new FitViewport(800, 480, camera);
 		super.render(); // important!
 	}
 	

@@ -19,13 +19,14 @@ public class SaveSlotScreen implements Screen {
     private Texture backgroundImage;
     private TextureRegion backgroundTexture;
 
+    private Skin skin;
+    private Stage stage;
     private TextButton slot1;
     private TextButton slot2;
     private TextButton slot3;
     private TextButton backButton;
 
     OrthographicCamera camera;
-    private Stage stage;
 
     public SaveSlotScreen(final TankStars game) {
 
@@ -33,7 +34,7 @@ public class SaveSlotScreen implements Screen {
 
         backgroundImage = new Texture(Gdx.files.internal("tankstarbg1.png"));
         backgroundTexture = new TextureRegion(backgroundImage);
-        Skin skin = new Skin(Gdx.files.internal("quantum-horizon-ui.json"));
+        skin = new Skin(Gdx.files.internal("quantum-horizon-ui.json"));
 
         slot1 = new TextButton("Empty slot", skin);
         slot1.setPosition(660,350);
@@ -117,6 +118,8 @@ public class SaveSlotScreen implements Screen {
 
     @Override
     public void dispose() {
-
+        backgroundImage.dispose();
+        skin.dispose();
+        stage.dispose();
     }
 }
