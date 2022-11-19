@@ -39,7 +39,7 @@ public class GameScreen implements Screen {
         // load the images for the droplet and the bucket, 64x64 pixels each
         dropImage = new Texture(Gdx.files.internal("drop.png"));
         bucketImage = new Texture(Gdx.files.internal("bucket.png"));
-        backgroundImage = new Texture(Gdx.files.internal("background.jpg"));
+        backgroundImage = new Texture(Gdx.files.internal("tankstarbg1.png"));
         backgroundTexture = new TextureRegion(backgroundImage, 0, 0, 1920, 1229);
 
         // load the drop sound effect and the rain background "music"
