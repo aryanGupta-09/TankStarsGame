@@ -27,6 +27,7 @@ public class TankSelectionScreen implements Screen {
     private SpriteBatch batch;
     private Texture selectTank;
     private Texture selectedTank;
+    private Texture tankImage;
 
     private Stage stage;
     private Skin skin;
@@ -36,12 +37,9 @@ public class TankSelectionScreen implements Screen {
     private TextButton weaponButton;
     private TextButton startGameButton;
     private TextButton backButton;
-
-    private boolean selected_tank[] = {false,false,false};
-
     OrthographicCamera camera;
 
-    TankSelectionScreen(final TankStars game){
+    TankSelectionScreen(final TankStars game,final String TankType){
 
         this.game = game;
 
@@ -59,9 +57,8 @@ public class TankSelectionScreen implements Screen {
         spectre_icon.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                selected_tank[0]=true;
-                selected_tank[1]=false;
-                selected_tank[2]=false;
+                game.setScreen(new TankSelectionScreen(game,"Spectre"));
+
             }
         });
 
@@ -71,9 +68,8 @@ public class TankSelectionScreen implements Screen {
         helios_icon.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                selected_tank[0]=false;
-                selected_tank[1]=true;
-                selected_tank[2]=false;
+                game.setScreen(new TankSelectionScreen(game,"Helios"));
+
             }
         });
 
@@ -83,28 +79,36 @@ public class TankSelectionScreen implements Screen {
         toxic_icon.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                selected_tank[0]=false;
-                selected_tank[1]=false;
-                selected_tank[2]=true;
+                game.setScreen(new TankSelectionScreen(game,"Toxic"));
+
             }
         });
-
+        System.out.println(TankType);
+        if(TankType.equals("Spectre")){
+            tankImage = new Texture(Gdx.files.internal("spectre_r.png"));
+        } else if (TankType.equals("Helios")) {
+            tankImage = new Texture(Gdx.files.internal("helios_r.png"));
+        } else if (TankType.equals("Toxic")) {
+            tankImage = new Texture(Gdx.files.internal("toxic_r.png"));
+        }else {
+            tankImage = new Texture(Gdx.files.internal("BlackTank_r.png"));
+        }
         weaponButton = new TextButton("WEAPONS", skin);
         weaponButton.setSize(289,58);
         weaponButton.setPosition(640,25);
         weaponButton.setColor(Color.YELLOW);
         weaponButton.addListener(new ClickListener(){
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                if(selected_tank[0]){
-                    game.setScreen(new WeaponScreen(game, "Spectre"));
-                }else if(selected_tank[1]){
-                    game.setScreen(new WeaponScreen(game, "Helios"));
-                }else if(selected_tank[2]){
-                    game.setScreen(new WeaponScreen(game, "Toxic"));
-                }
+        @Override
+        public void clicked(InputEvent event, float x, float y) {
+            if(TankType.equals("Spectre")){
+                game.setScreen(new WeaponScreen(game, "Spectre"));
+            }else if(TankType.equals("Helios")){
+                game.setScreen(new WeaponScreen(game, "Helios"));
+            }else if(TankType.equals("Toxic")){
+                game.setScreen(new WeaponScreen(game, "Toxic"));
             }
-        });
+        }
+    });
 
         startGameButton = new TextButton("START GAME", skin);
         startGameButton.setSize(400,100);
@@ -152,8 +156,11 @@ public class TankSelectionScreen implements Screen {
         game.batch.end();
 
         batch.begin();
+
         batch.draw(selectTank, 950, 0, 700, 900);
         batch.draw(selectedTank, 0, 0, 950, 900);
+        batch.draw(tankImage,290,150,450,250);
+
         batch.end();
 
         stage.act(Gdx.graphics.getDeltaTime()); //Perform ui logic
@@ -188,5 +195,7 @@ public class TankSelectionScreen implements Screen {
         stage.dispose();
         skin.dispose();
         batch.dispose();
+        tankImage.dispose();
     }
 }
+
