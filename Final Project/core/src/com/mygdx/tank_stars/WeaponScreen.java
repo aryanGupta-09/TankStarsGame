@@ -24,8 +24,6 @@ public class WeaponScreen implements Screen {
     private Texture selectedTank;
     private TextButton infoOne;
     private TextButton infoTwo;
-    private TextButton infoOneDesc;
-    private TextButton infoTwoDesc;
     private Texture tankImage;
     private Texture weaponOne;
     private  Texture weaponTwo;
@@ -33,8 +31,7 @@ public class WeaponScreen implements Screen {
     private TextButton backButton;
     private SpriteBatch batch;
     OrthographicCamera camera;
-    CharSequence str = "Hello World!";
-    BitmapFont font = new BitmapFont();
+
     WeaponScreen(final TankStars game,String tankname){
 
         this.game = game;
@@ -43,23 +40,34 @@ public class WeaponScreen implements Screen {
         selectedTank = new Texture(Gdx.files.internal("selected_bg.png"));
         Skin skin = new Skin(Gdx.files.internal("quantum-horizon-ui.json"));
 
-
         batch = new SpriteBatch();
 
-        if (tankname.equals("toxic")){
+        if(tankname.equals("Toxic")){
 
             tankImage = new Texture(Gdx.files.internal("toxic_r.png"));
             weaponOne = new Texture(Gdx.files.internal("acidStream.png"));
             weaponTwo = new Texture(Gdx.files.internal("toxicBlast.png"));
-            infoOne = new TextButton("Acid Stream\n\nToxic blast is\nweapon that shoots\na toxic missile", skin);
-            infoOne.setPosition(1150,470);
-            infoOne.setSize(300,150);
 
-            infoTwo = new TextButton("Toxic Blast", skin);
-            infoTwo.setPosition(1130,300);
-            infoTwo.setSize(289,58);
+            infoOne = new TextButton("Acid Stream\n\nAcid stream is\na weapon that shoots\nfour acid shot\nat the tank", skin);
+            infoTwo = new TextButton("Toxic Blast\n\nToxic blast is\nweapon that shoots\na toxic missile", skin);
 
+        } else if (tankname.equals("Spectre")) {
 
+            tankImage = new Texture(Gdx.files.internal("spectre_r.png"));
+            weaponOne = new Texture(Gdx.files.internal("lightningball.png"));
+            weaponTwo = new Texture(Gdx.files.internal("railgun.png"));
+
+            infoOne = new TextButton("Lightning Ball\n\nWhen shot on the ground,\nit would travel a\nshort distance and\nexplode", skin);
+            infoTwo = new TextButton("Railgun\n\nis an electric weapon\nused by Spectre,\nunaffected by gravity", skin);
+
+        } else if (tankname.equals("Helios")) {
+
+            tankImage = new Texture(Gdx.files.internal("helios_r.png"));
+            weaponOne = new Texture(Gdx.files.internal("napalm.png"));
+            weaponTwo = new Texture(Gdx.files.internal("hyperblast.png"));
+
+            infoOne = new TextButton("Napalm\n\nOn shooting\nit will have about\n5 to 15 balls of fire\nand causes area damage", skin);
+            infoTwo = new TextButton("Hyper Blast\n\na Long-range weapon that\nupon hitting the ground,\ncreates a sphere of\nfire and explodes.", skin);
 
         }
 
@@ -69,11 +77,19 @@ public class WeaponScreen implements Screen {
         backButton.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new TankSelectionScreen(game));
+                game.setScreen(new TankSelectionScreen(game,""));
             }
         });
 
+
+        infoOne.setPosition(1180,460);
+        infoOne.setSize(380,170);
         infoOne.setColor(Color.YELLOW);
+
+        infoTwo.setColor(Color.YELLOW);
+        infoTwo.setPosition(1180,160);
+        infoTwo.setSize(380,170);
+
         stage = new Stage(new ScreenViewport());
         stage.addActor(backButton);
         stage.addActor(infoOne);
@@ -101,15 +117,12 @@ public class WeaponScreen implements Screen {
         batch.draw(selectTank, 950, 0, 700, 900);
         batch.draw(selectedTank, 0, 0, 950, 900);
         batch.draw(tankImage,290,150,450,250);
-
-
-        batch.draw(weaponOne,1010,500,140,100);
-        batch.draw(weaponTwo,1210,200,140,100);
+        batch.draw(weaponOne,1040,500,140,100);
+        batch.draw(weaponTwo,1040,200,140,100);
         batch.end();
 
-        stage.act(Gdx.graphics.getDeltaTime()); //Perform ui logic
+        stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
-
     }
 
     @Override
@@ -134,6 +147,12 @@ public class WeaponScreen implements Screen {
 
     @Override
     public void dispose() {
-
+        tankImage.dispose();
+        weaponOne.dispose();
+        weaponTwo.dispose();
+        selectedTank.dispose();
+        selectTank.dispose();
+        stage.dispose();
+        batch.dispose();
     }
 }
