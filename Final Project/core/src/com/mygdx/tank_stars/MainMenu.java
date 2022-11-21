@@ -42,7 +42,7 @@ public class MainMenu implements Screen {
         newGameButton.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new TankSelectionScreen(game));
+                game.setScreen(new TankSelectionScreen(game,""));
                 dispose();
             }
         });
