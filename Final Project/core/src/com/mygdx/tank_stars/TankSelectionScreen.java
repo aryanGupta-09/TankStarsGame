@@ -1,3 +1,4 @@
+
 package com.mygdx.tank_stars;
 
 import com.badlogic.gdx.Gdx;
@@ -17,13 +18,14 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
-public class TankSelectionScreen implements Screen {
+import java.io.*;
+
+public class TankSelectionScreen implements Screen, Serializable {
 
     final TankStars game;
 
     private Texture backgroundImage;
     private TextureRegion backgroundTexture;
-
     private SpriteBatch batch;
     private Texture selectTank;
     private Texture selectedTank;
@@ -34,15 +36,20 @@ public class TankSelectionScreen implements Screen {
     private ImageButton spectre_icon;
     private ImageButton helios_icon;
     private ImageButton toxic_icon;
+    private TextButton playerNumber;
     private TextButton weaponButton;
     private TextButton startGameButton;
     private TextButton backButton;
+    private boolean unselected;
     OrthographicCamera camera;
 
-    TankSelectionScreen(final TankStars game,final String TankType){
+    TankSelectionScreen(final TankStars game, final String TankType, final String playerText,final String player1, final String player2){
 
         this.game = game;
-
+        final String firstplayer;
+        firstplayer="";
+        String secondplayer;
+        secondplayer="";
         backgroundImage = new Texture(Gdx.files.internal("tankstarbg1.png"));
         backgroundTexture = new TextureRegion(backgroundImage);
         skin = new Skin(Gdx.files.internal("quantum-horizon-ui.json"));
@@ -57,8 +64,12 @@ public class TankSelectionScreen implements Screen {
         spectre_icon.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new TankSelectionScreen(game,"Spectre"));
-
+                if(playerText.equals("Player1")) {
+                    game.setScreen(new TankSelectionScreen(game, "Spectre", playerText,"spectre_r.png",""));
+                }
+                else if (playerText.equals("Player2")){
+                    game.setScreen(new TankSelectionScreen(game, "Spectre", playerText,player1,"spectre_l.png"));
+                }
             }
         });
 
@@ -68,8 +79,12 @@ public class TankSelectionScreen implements Screen {
         helios_icon.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new TankSelectionScreen(game,"Helios"));
-
+                if(playerText.equals("Player1")) {
+                    game.setScreen(new TankSelectionScreen(game, "Helios", playerText,"helios_r.png",""));
+                }
+                else if (playerText.equals("Player2")){
+                    game.setScreen(new TankSelectionScreen(game, "Helios", playerText,player1,"helios_l.png"));
+                }
             }
         });
 
@@ -79,11 +94,17 @@ public class TankSelectionScreen implements Screen {
         toxic_icon.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new TankSelectionScreen(game,"Toxic"));
+                if(playerText.equals("Player1")) {
+                    game.setScreen(new TankSelectionScreen(game, "Toxic", playerText,"toxic_r.png",""));
+                }
+                else if (playerText.equals("Player2")){
+                    game.setScreen(new TankSelectionScreen(game, "Toxic", playerText,player1,"toxic_l.png"));
+                }
 
             }
         });
-        System.out.println(TankType);
+
+        unselected = false;
         if(TankType.equals("Spectre")){
             tankImage = new Texture(Gdx.files.internal("spectre_r.png"));
         } else if (TankType.equals("Helios")) {
@@ -91,29 +112,45 @@ public class TankSelectionScreen implements Screen {
         } else if (TankType.equals("Toxic")) {
             tankImage = new Texture(Gdx.files.internal("toxic_r.png"));
         }else {
-            tankImage = new Texture(Gdx.files.internal("BlackTank_r.png"));
+            tankImage = new Texture(Gdx.files.internal("blackTank_r.png"));
+            unselected = true;
         }
+
         weaponButton = new TextButton("WEAPONS", skin);
         weaponButton.setSize(289,58);
         weaponButton.setPosition(640,25);
         weaponButton.setColor(Color.YELLOW);
         weaponButton.addListener(new ClickListener(){
-        @Override
-        public void clicked(InputEvent event, float x, float y) {
-            if(TankType.equals("Spectre")){
-                game.setScreen(new WeaponScreen(game, "Spectre"));
-            }else if(TankType.equals("Helios")){
-                game.setScreen(new WeaponScreen(game, "Helios"));
-            }else if(TankType.equals("Toxic")){
-                game.setScreen(new WeaponScreen(game, "Toxic"));
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                if(TankType.equals("Spectre")){
+                    game.setScreen(new WeaponScreen(game, "Spectre",playerText,player1,player2));
+                }else if(TankType.equals("Helios")){
+                    game.setScreen(new WeaponScreen(game, "Helios",playerText,player1,player2));
+                }else if(TankType.equals("Toxic")){
+                    game.setScreen(new WeaponScreen(game, "Toxic",playerText,player1,player2));
+                }
             }
-        }
-    });
+        });
 
-        startGameButton = new TextButton("START GAME", skin);
+        playerNumber = new TextButton(playerText, skin);
+        playerNumber.setPosition(500,750);
+        playerNumber.setSize(300,70);
+
+        startGameButton = new TextButton("READY!", skin);
         startGameButton.setSize(400,100);
         startGameButton.setPosition(1080,50);
         startGameButton.setColor(Color.YELLOW);
+        startGameButton.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                if(playerText.equals("Player1") && !unselected){
+                    game.setScreen(new TankSelectionScreen(game, "","Player2",player1,player2));
+                } else if (playerText.equals("Player2") && !unselected) {
+                    game.setScreen(new GameScreen(game,player1,player2));
+                }
+            }
+        });
 
         backButton = new TextButton("<--", skin);
         backButton.setPosition(1480,847);
@@ -121,7 +158,11 @@ public class TankSelectionScreen implements Screen {
         backButton.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new MainMenu(game));
+                if(playerText.equals("Player1")){
+                    game.setScreen(new MainMenu(game));
+                } else if (playerText.equals("Player2")) {
+                    game.setScreen(new TankSelectionScreen(game,"","Player1","",""));
+                }
             }
         });
 
@@ -132,11 +173,32 @@ public class TankSelectionScreen implements Screen {
         stage.addActor(weaponButton);
         stage.addActor(startGameButton);
         stage.addActor(backButton);
+        stage.addActor(playerNumber);
         Gdx.input.setInputProcessor(stage);
 
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 800, 480);
 
+    }
+
+    public void serialize() throws IOException {
+
+        ObjectOutputStream out = null;
+        try {
+            out = new ObjectOutputStream (new FileOutputStream("out.txt"));
+            out.writeObject(this);
+        } finally {
+            out.close();
+        }
+    }
+
+    public void deserialize() throws IOException, ClassNotFoundException {
+        ObjectInputStream in = null;
+        try {
+            in = new ObjectInputStream (new FileInputStream("out.txt"));
+        } finally {
+            in.close();
+        }
     }
 
     @Override
@@ -198,4 +260,3 @@ public class TankSelectionScreen implements Screen {
         tankImage.dispose();
     }
 }
-

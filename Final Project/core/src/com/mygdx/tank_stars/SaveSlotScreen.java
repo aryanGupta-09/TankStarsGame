@@ -13,7 +13,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
-public class SaveSlotScreen implements Screen {
+import java.io.*;
+
+public class SaveSlotScreen implements Screen, Serializable {
 
     final TankStars game;
     private Texture backgroundImage;
@@ -36,9 +38,15 @@ public class SaveSlotScreen implements Screen {
         backgroundTexture = new TextureRegion(backgroundImage);
         skin = new Skin(Gdx.files.internal("quantum-horizon-ui.json"));
 
-        slot1 = new TextButton("Empty slot", skin);
+        slot1 = new TextButton("Saved Progress 1", skin);
         slot1.setPosition(660,350);
         slot1.setSize(300,70);
+        slot1.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new GameScreen(game,"spectre_r.png","spectre_l.png"));
+            }
+        });
 
         slot2 = new TextButton("Empty slot", skin);
         slot2.setPosition(660,230);
@@ -47,6 +55,8 @@ public class SaveSlotScreen implements Screen {
         slot3 = new TextButton("Empty slot", skin);
         slot3.setPosition(660,110);
         slot3.setSize(300,70);
+
+
 
         backButton = new TextButton("<--", skin);
         backButton.setPosition(1480,847);
@@ -69,11 +79,24 @@ public class SaveSlotScreen implements Screen {
         camera.setToOrtho(false, 800, 480);
     }
 
-    public boolean allSlotsEmpty(){
-        if(slot1.getText()=="Empty Slot" && slot2.getText()=="Empty Slot" && slot3.getText()=="Empty Slot"){
-            return false;
+    public void serialize() throws IOException {
+
+        ObjectOutputStream out = null;
+        try {
+            out = new ObjectOutputStream (new FileOutputStream("out.txt"));
+            out.writeObject(this);
+        } finally {
+            out.close();
         }
-        return true;
+    }
+
+    public void deserialize() throws IOException, ClassNotFoundException {
+        ObjectInputStream in = null;
+        try {
+            in = new ObjectInputStream (new FileInputStream("out.txt"));
+        } finally {
+            in.close();
+        }
     }
 
     @Override
