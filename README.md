@@ -12,7 +12,7 @@ A PvP tank fighting game created in Java using LibGDX and Box2d.
 
 2. Open with Eclipse, Intellij, or VSCode
 
-3. Navigate to /desktop/src/com/mygdx/tank_stars
+3. Navigate to TankStarsGame/Final Project/desktop/src/com/mygdx/tank_stars
 
 4. Run DesktopLauncher.java
 
