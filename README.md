@@ -1,6 +1,6 @@
 # TankStars
 
-A PvP tank fighting game created in Java using LibGDX and Box2d.
+A PvP tank fighting game based on "Tank Stars" by Azur Games.
 
 ## Tech Stack
 
