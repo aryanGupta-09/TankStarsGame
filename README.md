@@ -1,4 +1,4 @@
-# TankStars
+# TankStarsGame
 
 A PvP tank fighting game based on "Tank Stars" by Azur Games.
 
